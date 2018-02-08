@@ -17,6 +17,7 @@ function getMovies() {
 }
 
 function getById($id) {
+	//
 		$query = $pdo->prepare("SELECT * FROM movies WHERE id = ?");
 		$query->execute(array($id));
 		$movie = $query->fetch(PDO::FETCH_ASSOC);
