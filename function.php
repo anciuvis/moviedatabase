@@ -10,17 +10,50 @@ function connect() {
 
 function getMovies() {
 	$pdo = connect();
-	$query = $pdo->prepare('SELECT * FROM movies ORDER BY id');
+	if (isset($_GET['sortType'])) {
+		if($_GET['sortType']=='yearAsc') { $que = 'SELECT * FROM movies ORDER BY year asc'; }
+		if($_GET['sortType']=='yearDesc') { $que = 'SELECT * FROM movies ORDER BY year desc'; }
+		if($_GET['sortType']=='titleAsc') { $que = 'SELECT * FROM movies ORDER BY title asc'; }
+		if($_GET['sortType']=='titleDesc') { $que = 'SELECT * FROM movies ORDER BY title desc'; }
+		if($_GET['sortType']=='lengthAsc') { $que = 'SELECT * FROM movies ORDER BY length asc'; }
+		if($_GET['sortType']=='lengthDesc') { $que = 'SELECT * FROM movies ORDER BY length desc'; }
+		if($_GET['sortType']=='ratingAsc') { $que = 'SELECT * FROM movies ORDER BY rating asc'; }
+		if($_GET['sortType']=='ratingDesc') { $que = 'SELECT * FROM movies ORDER BY rating desc'; }
+
+	} else {
+		$que = 'SELECT * FROM movies ORDER BY id';
+	}
+	$query = $pdo->prepare($que);
 	$query->execute();
 	$movies = $query->fetchAll(PDO::FETCH_ASSOC);
 	return $movies;
 }
 
 function getById($id) {
+		$pdo = connect();
 		$query = $pdo->prepare("SELECT * FROM movies WHERE id = ?");
-		$query->execute(array($id));
+		$query->execute([$id]);
 		$movie = $query->fetch(PDO::FETCH_ASSOC);
 		return $movie;
 }
 
+function deleteId() {
+	$pdo = connect();
+	$query = $pdo->prepare("DELETE FROM movies WHERE id= :param");
+	$query->execute([':param'=>$_GET['edit_id']]);
+}
+
+function saveRecord() {
+	$pdo = connect();
+	if(isset($_GET['edit_id'])) {
+		$sql = "UPDATE movies SET title='".$_POST['title']."', quality='".$_POST['quality']."', length='".$_POST['length']."', year='".$_POST['year']."', description='".$_POST['description']."', image='".$_POST['image']."', rating='".$_POST['rating']."' WHERE id = :param";
+		$query = $pdo->prepare($sql);
+		$query->execute([':param'=>$_POST['id']]);
+
+	} else {
+		$sql = 'INSERT INTO movies (title, quality, length, year, description, image, rating) VALUES ("'.$_POST['title'].'", "'.$_POST['quality'].'", "'.$_POST['length'].'", "'.$_POST['year'].'", "'.$_POST['description'].'", "'.$_POST['image'].'", "'.$_POST['rating'].'")';
+		$query = $pdo->prepare($sql);
+		$query->execute();
+	}
+}
 ?>

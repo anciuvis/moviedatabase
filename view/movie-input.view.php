@@ -3,7 +3,7 @@
 		<?php
 			if(isset($_GET['edit_id'])) { ?>
 				<h1>Edit movie form</h1>
-				<form action="movie_update.php" method="POST" class="row">
+				<form action="movie_update.php?edit_id=<?= $_GET['edit_id'] ?>" method="POST" class="row">
 		<?php
 			} else { ?>
 				<h1>New movie form</h1>
