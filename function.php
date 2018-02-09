@@ -30,11 +30,19 @@ function getMovies() {
 }
 
 function getById($id) {
-		$pdo = connect();
-		$query = $pdo->prepare("SELECT * FROM movies WHERE id = ?");
-		$query->execute([$id]);
-		$movie = $query->fetch(PDO::FETCH_ASSOC);
-		return $movie;
+	$pdo = connect();
+	$query = $pdo->prepare("SELECT * FROM movies WHERE id = ?");
+	$query->execute([$id]);
+	$movie = $query->fetch(PDO::FETCH_ASSOC);
+	return $movie;
+}
+
+function getComments($id) {
+	$pdo = connect();
+	$query = $pdo->prepare("SELECT * FROM comments WHERE movieId = ?");
+	$query->execute([$id]);
+	$comments = $query->fetchAll(PDO::FETCH_ASSOC);
+	return $comments;
 }
 
 function deleteId() {

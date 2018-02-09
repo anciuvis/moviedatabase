@@ -14,5 +14,14 @@
 		</div>
 		<iframe class="mx-auto my-3" width="560" height="315" src="<?= $movie['video'] ?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 	</div>
-
+	<div class="card my-3 mx-0 p-3">
+		<div class="d-inline-flex">
+			<h4 class="text-left p-2">Comments</h4><a href="index.php" class="btn btn-primary mt-auto ml-auto p-2">Add comment</a>
+		</div>
+		<?php for ($i = 0; $i <= $comments.length ; $i++): ?>
+			<div>
+				<?= $comments[$i]['id'] ?>
+			</div>
+		<?php endfor; ?>
+	</div>
 </body>

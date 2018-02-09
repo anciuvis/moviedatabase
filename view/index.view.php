@@ -52,7 +52,7 @@
 			</nav>
 			<div class="row">
 				<?php for ($i = $from; $i <=$till ; $i++): ?>
-					<div class="col-lg-3 col-md-6 col-sm-12">
+					<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
 						<article class="card my-3 mx-0 p-3">
 							<header class="title-header text-center" style="min-height: 94px;">
 								<h4 style="min-height: 76px; padding-top: 10px;"><?= $movies[$i]['title'] ?></h4>
