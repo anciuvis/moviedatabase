@@ -14,8 +14,12 @@
 				<p></p>
 				<a href="index.php" class="btn btn-outline-secondary btn-block col-lg-2 col-md-3 col-xs-12">Clear all</a>
 			</div>
+			<div class="position-relative">
+				<input type="text" id="searchMovie" placeholder="Search.." style="width: 100%;">
+				<div class="position-absolute" id="searchList" style="z-index: 2; width: 100%; background-color: rgba(219, 224, 217, 0.95); padding: 0 15px;"></div>
+			</div>
 			<nav aria-label="page navigation">
-				<ul class="pagination justify-content-center mb-0">
+				<ul class="pagination justify-content-center mb-0 mt-2">
 					<? if( $_GET['page'] > 1 ): ?>
 					<li class="page-item">
 						<a class="page-link" href="index.php?page=1" aria-label="Previous">
@@ -111,6 +115,30 @@
 					<? endif; ?>
 				</ul>
 			</nav>
+			<script type="text/javascript">
+				$('#searchMovie').on('keyup', function(e){
+					var search = $(this).val();
+					$.ajax({
+						url: 'search.php',
+						data: {name: search},
+						dataType: 'json',
+						type: 'POST',
+						success: function (data) {
+							$( '#searchOutput' ).remove();
+							let output = "<div id='searchOutput'>";
+							for (let i = 0; i < data.length; i++) {
+								output += "<div><a href='movie.php?edit_id="+data[i].id+"'>"+data[i].title+"</a></div>"
+								console.log(data[i]);
+							}
+							output +="</div>";
+							$( '#searchList' ).append(output);
+						},
+						error: function (data) {
+							console.log('Error', data);
+						}
+					});
+				})
+			</script>
 		</section>
 	</body>
 </html>

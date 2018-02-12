@@ -64,4 +64,13 @@ function saveRecord() {
 		$query->execute();
 	}
 }
+
+function searchMovie($search) {
+	$pdo = connect();
+	$sql = "SELECT title, id FROM movies WHERE title LIKE '%{$search}%' ";
+	$query = $pdo->prepare($sql);
+	$query->execute();
+	$results = $query->fetchAll(PDO::FETCH_ASSOC);
+	return $results;
+}
 ?>
