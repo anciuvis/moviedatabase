@@ -26,7 +26,8 @@
 					<h6>".$comments[$i]['date']." ".$comments[$i]['eMail']."</h6>
 					<p>".$comments[$i]['content']."</p>
 				</div>";
-			}?>
+			}
+			?>
 		</div>
 	</div>
 	<script type="text/javascript">
