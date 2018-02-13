@@ -37,6 +37,14 @@ function getById($id) {
 	return $movie;
 }
 
+function postComment() {
+	$pdo = connect();
+	$sql = 'INSERT INTO comments (movieId, userName, eMail, content) VALUES ("'.$_POST['movieId'].'", "'.$_POST['userName'].'", "'.$_POST['eMail'].'", "'.$_POST['content'].'")';
+	$query = $pdo->prepare($sql);
+	$query->execute();
+	return getComments($_POST['movieId']);
+}
+
 function getComments($id) {
 	$pdo = connect();
 	$query = $pdo->prepare("SELECT * FROM comments WHERE movieId = ?");

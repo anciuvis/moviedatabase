@@ -12,21 +12,21 @@
 				<a href="index.php" class="btn btn-primary mt-auto ml-auto px-5 py-2">Back</a>
 			</div>
 		</div>
-		<iframe class="mx-auto my-3" width="560" height="315" src="<?= $movie['video'] ?>" frameborder="0" allowfullscreen></iframe>
+		<!-- <iframe class="mx-auto my-3" width="560" height="315" src="<= //$movie['video'] >" frameborder="0" allowfullscreen></iframe> -->
 	</div>
 	<div class="card my-3 mx-0 p-3">
 		<div class="d-inline-flex">
 			<h4 class="text-left p-2">Comments</h4><a href="#" id="btnNewComment" class="btn btn-info mt-auto ml-auto py-2 px-3">Add comment</a>
 		</div>
 		<div class="container" id="commentForm"></div>
-		<div class="container mx-0 my-2">
-			<?php for ($i = 0; $i <= $comments.length ; $i++): ?>
-				<div class="card py-2 px-3">
-					<h5><?= $comments[$i]['userName']?></h5>
-					<h6><?=$comments[$i]['date']?> <?=$comments[$i]['eMail']?></h6>
-					<p><?= $comments[$i]['content'] ?></p>
-				</div>
-			<?php endfor; ?>
+		<div class="container mx-0 my-2" id='commentList'>
+			<?php for ($i = 0; $i <= $comments.length ; $i++){
+				echo "<div class='card py-2 px-3'>
+					<h5>".$comments[$i]['userName']."</h5>
+					<h6>".$comments[$i]['date']." ".$comments[$i]['eMail']."</h6>
+					<p>".$comments[$i]['content']."</p>
+				</div>";
+			}?>
 		</div>
 	</div>
 	<script type="text/javascript">
@@ -35,7 +35,7 @@
 		function addForm (){
 			$( '#commentForm' ).empty();
 
-			let formDiv = $( '<div>' );
+			let formDiv = $( '<form>' );
 			formDiv.attr('class', 'row');
 
 			let columnFirst = $( '<div>' );
@@ -45,6 +45,7 @@
 			let movieId = $('<input>');
 			movieId.val(<?= $_GET['edit_id']; ?>);
 			movieId.attr('id','movieId');
+			movieId.attr('name','movieId');
 			movieId.attr('type','hidden');
 			columnFirst.append($( movieId ));
 
@@ -55,6 +56,7 @@
 
 			let userNameInput = $('<input>');
 			userNameInput.attr('id','userName');
+			userNameInput.attr('name','userName');
 			userNameInput.attr('class', 'form-control');
 			columnFirst.append($( userNameInput ));
 
@@ -65,6 +67,7 @@
 
 			let eMailInput = $('<input>');
 			eMailInput.attr('id','eMail');
+			eMailInput.attr('name','eMail');
 			eMailInput.attr('class', 'form-control');
 			columnFirst.append($( eMailInput ));
 
@@ -80,6 +83,7 @@
 			let commentInput = $( '<textarea>' );
 			commentInput.attr('class', 'form-control h-50 col-lg-12 col-md-12 col-sm-12');
 			commentInput.attr('id','commentInput');
+			commentInput.attr('name','content');
 			columnSecond.append($( commentInput ));
 
 			let sendBtn = $( '<button>' );
@@ -102,12 +106,26 @@
 		};
 
 		function saveComment() {
-			let entry = {
-				userName: $( '#userName' ).val(),
-				eMail: $( '#eMail' ).val(),
-				movieId: $( '#movieId' ).val()
-			};
-			
+			event.preventDefault();
+			let comment = $( 'form' ).serialize();
+			console.log($( 'form' ).serialize());
+			$.ajax({
+				type: 'POST',
+				url: 'commentAdd.php',
+				contentType: 'application/json',
+				data: comment,
+				success: function(data) {
+					if (data.error) {
+						alert(data.error);
+					} else {
+						let newCom = "<div class='card py-2 px-3'><h5>"+data.userName+"</h5><h6>"+data.date+" "+data.eMail+"</h6><p>"+data.content+"</p></div>";
+						$( '#commentList' ).prepend(newCom);
+					}
+				},
+				error: function (response) {
+					alert('Error: '+response);
+				}
+			});
 		};
 	</script>
 </body>
