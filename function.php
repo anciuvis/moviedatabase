@@ -42,7 +42,14 @@ function postComment() {
 	$sql = 'INSERT INTO comments (movieId, userName, eMail, content) VALUES ("'.$_POST['movieId'].'", "'.$_POST['userName'].'", "'.$_POST['eMail'].'", "'.$_POST['content'].'")';
 	$query = $pdo->prepare($sql);
 	$query->execute();
-	return getComments($_POST['movieId']);
+	$id = $pdo->lastInsertId();
+	commentInsert($id);
+	// return $id;
+	// return getComments($_POST['movieId']);
+}
+
+function commentInsert($id) {
+
 }
 
 function getComments($id) {
@@ -62,14 +69,14 @@ function deleteId() {
 function saveRecord() {
 	$pdo = connect();
 	if(isset($_GET['edit_id'])) {
-		$sql = "UPDATE movies SET title='".$_POST['title']."', quality='".$_POST['quality']."', length='".$_POST['length']."', year='".$_POST['year']."', description='".$_POST['description']."', image='".$_POST['image']."', rating='".$_POST['rating']."' WHERE id = :param";
+		$sql = "UPDATE movies SET title= :title, quality= :quality, length= :length, year= :year, description= :description, image= :image, rating= :rating WHERE id = :param";
 		$query = $pdo->prepare($sql);
-		$query->execute([':param'=>$_POST['id']]);
+		$query->execute([':param'=>$_POST['id'], ':title'=>$_POST['title'], ':quality'=>$_POST['quality'], ':length'=>$_POST['length'], ':year'=>$_POST['year'], ':description'=>$_POST['description'], ':image'=>$_POST['image'], ':rating'=>$_POST['rating'], ]);
 
 	} else {
-		$sql = 'INSERT INTO movies (title, quality, length, year, description, image, rating) VALUES ("'.$_POST['title'].'", "'.$_POST['quality'].'", "'.$_POST['length'].'", "'.$_POST['year'].'", "'.$_POST['description'].'", "'.$_POST['image'].'", "'.$_POST['rating'].'")';
+		$sql = 'INSERT INTO movies (title, quality, length, year, description, image, rating) VALUES (:title, :quality, :length, :year, :description, :image, :rating)';
 		$query = $pdo->prepare($sql);
-		$query->execute();
+		$query->execute([':title'=>$_POST['title'], ':quality'=>$_POST['quality'], ':length'=>$_POST['length'], ':year'=>$_POST['year'], ':description'=>$_POST['description'], ':image'=>$_POST['image'], ':rating'=>$_POST['rating']]);
 	}
 }
 

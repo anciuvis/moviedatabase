@@ -20,11 +20,9 @@
 		</div>
 		<div class="container" id="commentForm"></div>
 		<div class="container mx-0 my-2" id='commentList'>
-			<?php for ($i = 0; $i <= $comments.length ; $i++){
-				echo "<div class='card py-2 px-3'>
-					<h5>".$comments[$i]['userName']."</h5>
-					<h6>".$comments[$i]['date']." ".$comments[$i]['eMail']."</h6>
-					<p>".$comments[$i]['content']."</p>
+			<?php
+			for ($i = 0; $i < sizeof($comments) ; $i++){
+				echo "<div class='card py-2 px-3'><h5>".$comments[$i]['userName']."</h5><h6>".$comments[$i]['date']." ".$comments[$i]['eMail']."</h6><p>".$comments[$i]['content']."</p>
 				</div>";
 			}
 			?>
@@ -109,16 +107,27 @@
 		function saveComment() {
 			event.preventDefault();
 			let comment = $( 'form' ).serialize();
-			console.log($( 'form' ).serialize());
+
+			//console.log(comment);
+			$.post('commentAdd.php', comment, function(data){
+				console.log(data);
+			}, 'json');
+
+
+
+			return;
+			// console.log($( 'form' ).serialize());
 			$.ajax({
 				type: 'POST',
 				url: 'commentAdd.php',
-				contentType: 'application/json',
+				// contentType: 'application/json',
 				data: comment,
+				dataType: 'json',
 				success: function(data) {
 					if (data.error) {
 						alert(data.error);
 					} else {
+						return;
 						let newCom = "<div class='card py-2 px-3'><h5>"+data.userName+"</h5><h6>"+data.date+" "+data.eMail+"</h6><p>"+data.content+"</p></div>";
 						$( '#commentList' ).prepend(newCom);
 					}
