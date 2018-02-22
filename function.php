@@ -71,7 +71,7 @@ function saveRecord() {
 	if(isset($_GET['edit_id'])) {
 		$sql = "UPDATE movies SET title= :title, quality= :quality, length= :length, year= :year, description= :description, image= :image, rating= :rating WHERE id = :param";
 		$query = $pdo->prepare($sql);
-		$query->execute([':param'=>$_POST['id'], ':title'=>$_POST['title'], ':quality'=>$_POST['quality'], ':length'=>$_POST['length'], ':year'=>$_POST['year'], ':description'=>$_POST['description'], ':image'=>$_POST['image'], ':rating'=>$_POST['rating'], ]);
+		$query->execute([':param'=>$_POST['id'], ':title'=>$_POST['title'], ':quality'=>$_POST['quality'], ':length'=>$_POST['length'], ':year'=>$_POST['year'], ':description'=>$_POST['description'], ':image'=>$_POST['image'], ':rating'=>$_POST['rating'] ]);
 
 	} else {
 		$sql = 'INSERT INTO movies (title, quality, length, year, description, image, rating) VALUES (:title, :quality, :length, :year, :description, :image, :rating)';
